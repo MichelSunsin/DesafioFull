@@ -1,0 +1,267 @@
+<div>
+  <div class="container">
+    <div class="child-container">
+      <h2>Cadastro de dívida</h2>
+      <form
+        id="formDivida"
+        [formGroup]="formDivida"
+        (submit)="onFormDividaSubmit()"
+      >
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Número do título </mat-label>
+          <input
+            matInput
+            formControlName="numeroTitulo"
+            type="number"
+            placeholder="Ex: 101010"
+            required
+            min="0"
+            max="2147483647"
+          />
+          <mat-error
+            *ngIf="
+              formDivida.controls.numeroTitulo.touched &&
+              formDivida.controls.numeroTitulo.invalid
+            "
+          >
+            <span *ngIf="formDivida.controls.numeroTitulo.errors.required"
+              >Campo obrigatório</span
+            >
+            <span
+              *ngIf="
+                formDivida.controls.numeroTitulo.errors.min ||
+                formDivida.controls.numeroTitulo.errors.max
+              "
+              >Valor inválido</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Nome do devedor </mat-label>
+          <input
+            matInput
+            formControlName="nomeDevedor"
+            type="text"
+            placeholder="Ex: Fulano da Silva"
+            required
+            maxLength="100"
+          />
+          <mat-error
+            *ngIf="
+              formDivida.controls.nomeDevedor.touched &&
+              formDivida.controls.nomeDevedor.invalid
+            "
+          >
+            <span *ngIf="formDivida.controls.nomeDevedor.errors.required"
+              >Campo obrigatório</span
+            >
+            <span *ngIf="formDivida.controls.nomeDevedor.errors.maxLength"
+              >Valor inválido</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> CPF do devedor </mat-label>
+          <input
+            matInput
+            formControlName="cpfDevedor"
+            type="text"
+            required
+            placeholder="Ex: 11155577799"
+          />
+          <mat-error
+            *ngIf="
+              formDivida.controls.cpfDevedor.touched &&
+              formDivida.controls.cpfDevedor.invalid
+            "
+          >
+            <span *ngIf="formDivida.controls.cpfDevedor.errors.required"
+              >Campo obrigatório</span
+            >
+            <span *ngIf="formDivida.controls.cpfDevedor.errors.pattern"
+              >Valor inválido</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Juros</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="porcentagemJuros"
+            required
+            min="0"
+          />
+          <span matSuffix>%</span>
+          <mat-error
+            *ngIf="
+              formDivida.controls.porcentagemJuros.touched &&
+              formDivida.controls.porcentagemJuros.invalid
+            "
+          >
+            <span *ngIf="formDivida.controls.porcentagemJuros.errors.required"
+              >Campo obrigatório</span
+            >
+            <span *ngIf="formDivida.controls.porcentagemJuros.errors.min"
+              >Valor inválido</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Multa</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="porcentagemMulta"
+            required
+            min="0"
+          />
+          <span matSuffix>%</span>
+          <mat-error
+            *ngIf="
+              formDivida.controls.porcentagemMulta.touched &&
+              formDivida.controls.porcentagemMulta.invalid
+            "
+          >
+            <span *ngIf="formDivida.controls.porcentagemMulta.errors.required"
+              >Campo obrigatório</span
+            >
+            <span *ngIf="formDivida.controls.porcentagemMulta.errors.min"
+              >Valor inválido</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="child-container">
+      <div class="form-box">
+        <h2>Cadastro de parcelas</h2>
+        <form
+          [formGroup]="formParcela"
+          #formDirective="ngForm"
+          (ngSubmit)="onFormParcelaSubmit(formDirective)"
+          id="formParcela"
+        >
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label> Número da parcela </mat-label>
+            <input
+              matInput
+              formControlName="numero"
+              type="number"
+              placeholder="Ex: 10"
+              required
+              min="0"
+              max="2147483647"
+            />
+            <mat-error
+              *ngIf="
+                formParcela.controls.numero.touched &&
+                formParcela.controls.numero.invalid
+              "
+            >
+              <span *ngIf="formParcela.controls.numero.errors.required"
+                >Campo obrigatório</span
+              >
+              <span
+                *ngIf="
+                  formParcela.controls.numero.errors.min ||
+                  formParcela.controls.numero.errors.max
+                "
+                >Valor inválido</span
+              >
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label> Data de vencimento </mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              required
+              formControlName="dataVencimento"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="
+                formParcela.controls.dataVencimento.touched &&
+                formParcela.controls.dataVencimento.invalid
+              "
+            >
+              <span *ngIf="formParcela.controls.dataVencimento.errors.required"
+                >Campo obrigatório</span
+              >
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label> Valor da parcela </mat-label>
+            <input
+              matInput
+              formControlName="valor"
+              type="number"
+              required
+              min="0"
+              placeholder="Ex: 100"
+              style="text-align: right"
+            />
+            <span matPrefix>R$&nbsp;</span>
+            <mat-error
+              *ngIf="
+                formParcela.controls.valor.touched &&
+                formParcela.controls.valor.invalid
+              "
+            >
+              <span *ngIf="formParcela.controls.valor.errors.required"
+                >Campo obrigatório</span
+              >
+              <span *ngIf="formParcela.controls.valor.errors.min"
+                >Valor inválido</span
+              >
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-stroked-button color="accent" type="submit">
+            Adicionar parcela
+          </button>
+        </form>
+      </div>
+      <h2>Parcelas</h2>
+      <div class="lista-parcelas" *ngIf="divida.parcelas.length">
+        <div class="parcela-item" *ngFor="let parcela of divida.parcelas">
+          <b>Parcela {{ parcela.numero }}</b>
+          {{ parcela.valor | currency: "BRL" }} com vencimento em
+          {{ parcela.dataVencimento | date }}
+          <a (click)="removerParcela(parcela)" style="cursor: pointer">
+            <mat-icon aria-hidden="false" aria-label="Deletar parcela"
+              >delete</mat-icon
+            >
+          </a>
+        </div>
+      </div>
+      <div class="list-parcelas" *ngIf="!divida.parcelas.length">
+        <div class="parcela-item-vazia">
+          <i>É necessário registrar pelo menos 1(uma) parcela.</i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn-salvar"
+      type="submit"
+      form="formDivida"
+    >
+      Salvar
+    </button>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+.container {
+  /* margin: auto;
+  width: 500px; */
+  display: flex;
+  padding-bottom: 50px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+#formParcela {
+  margin-bottom: 10px;
+}
+
+.child-container {
+  padding: 10px;
+  flex: 1;
+}
+
+.form-box {
+  border-bottom: 1px solid #ccc;
+}
+
+.lista-parcelas {
+  max-height: 122px;
+  overflow-y: scroll;
+}
+
+.parcela-item {
+  display: flex;
+  padding: 10px;
+  background-color: #d0d0d0;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #aaa;
+}
+
+.parcela-item-vazia {
+  padding: 10px;
+  background-color: #d0d0d0;
+  text-align: center;
+}
+
+.btn-salvar {
+  width: initial;
+}
+
+.footer {
+  padding: 5px;
+  text-align: right;
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .child-container {
+    padding: 10px;
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .btn-salvar {
+    width: 100%;
+  }
+}
