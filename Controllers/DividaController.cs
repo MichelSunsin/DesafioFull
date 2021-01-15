@@ -20,9 +20,7 @@ namespace DesafioFULL.Controllers
     public ActionResult<List<Divida>> GetList()
     {
       var dividas = _repository.GetList();
-      if (dividas.Count > 0)
-        return Ok(dividas);
-      else return NotFound();
+      return Ok(dividas);
     }
 
     [HttpPost]

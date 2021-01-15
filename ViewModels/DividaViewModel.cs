@@ -25,20 +25,27 @@ namespace DesafioFULL.ViewModels
       }
       set { ValorOriginal = value; }
     }
+    public decimal ValorMulta
+    {
+      get
+      {
+        return ValorOriginal * decimal.Divide(PorcentagemMulta, 100);
+      }
+      set { ValorMulta = value; }
+    }
     public decimal ValorAtualizado
     {
       get
       {
-        decimal juros = 0;
-        decimal multa = 0;
+        decimal jurosTotal = 0;
         if (DiasAtraso > 0)
         {
           Parcelas.ForEach(parcela =>
           {
-            juros += decimal.Divide(decimal.Divide(PorcentagemJuros, 100), 30) * parcela.DiasAtraso * parcela.Valor;
+            parcela.Juros = decimal.Divide(decimal.Divide(PorcentagemJuros, 100), parcela.DiasNoMes) * parcela.DiasAtraso * parcela.Valor;
+            jurosTotal += parcela.Juros;
           });
-          multa = ValorOriginal * decimal.Divide(PorcentagemMulta, 100); // + juros;
-          return ValorOriginal + multa + juros;
+          return ValorOriginal + ValorMulta + jurosTotal;
         }
         else { return ValorOriginal; }
       }

@@ -68,8 +68,8 @@
             matInput
             formControlName="cpfDevedor"
             type="text"
+            maxlength="11"
             required
-            placeholder="Ex: 11155577799"
           />
           <mat-error
             *ngIf="
@@ -80,7 +80,7 @@
             <span *ngIf="formDivida.controls.cpfDevedor.errors.required"
               >Campo obrigatório</span
             >
-            <span *ngIf="formDivida.controls.cpfDevedor.errors.pattern"
+            <span *ngIf="formDivida.controls.cpfDevedor.errors.cpfNotValid"
               >Valor inválido</span
             >
           </mat-error>
@@ -174,8 +174,10 @@
                 >Valor inválido</span
               >
             </mat-error>
+            <span *ngIf="formParcela.controls.numero.errors?.notUnique"
+              >Número já utilizado</span
+            >
           </mat-form-field>
-
           <mat-form-field appearance="outline">
             <mat-label> Data de vencimento </mat-label>
             <input
@@ -197,6 +199,9 @@
             >
               <span *ngIf="formParcela.controls.dataVencimento.errors.required"
                 >Campo obrigatório</span
+              >
+              <span *ngIf="formParcela.controls.dataVencimento.errors.notUnique"
+                >Data já utilizada</span
               >
             </mat-error>
           </mat-form-field>

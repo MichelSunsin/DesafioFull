@@ -6,8 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { DividaService } from '../../services/divida.service';
-import Divida from '../../models/Divida';
 import { Router } from '@angular/router';
+
+import { CPFValidator } from '../../validators/CPFValidator';
+import Divida from '../../models/Divida';
+import DividaParcela from 'src/app/models/DividaParcela';
 
 @Component({
   selector: 'app-add-divida',
@@ -23,7 +26,7 @@ export class AddDividaComponent implements OnInit {
       Validators.max(2147483647),
     ]),
     nomeDevedor: new FormControl(null, Validators.maxLength(100)),
-    cpfDevedor: new FormControl(null),
+    cpfDevedor: new FormControl(null, CPFValidator.isValid()),
     porcentagemJuros: new FormControl(null, Validators.min(0)),
     porcentagemMulta: new FormControl(null, Validators.min(0)),
   });
@@ -53,10 +56,25 @@ export class AddDividaComponent implements OnInit {
   }
 
   onFormParcelaSubmit(formDirective: FormGroupDirective) {
+    this.validarNumeroDataParcela(this.formParcela.value);
     if (this.formParcela.valid) {
       this.adicionarParcela(this.formParcela.value);
       formDirective.resetForm();
     }
+  }
+
+  validarNumeroDataParcela({ numero, dataVencimento }): void {
+    this.divida.parcelas.map((parcela) => {
+      if (parcela.numero === numero) {
+        console.log(1);
+        this.formParcela.setErrors({ notUnique: true });
+      }
+
+      if (parcela.dataVencimento === dataVencimento) {
+        console.log(2);
+        this.formParcela.setErrors({ notUnique: true });
+      }
+    });
   }
 
   adicionarParcela({ numero, dataVencimento, valor }) {
@@ -76,7 +94,7 @@ export class AddDividaComponent implements OnInit {
     );
   }
 
-  removerParcela(parcela) {
+  removerParcela(parcela: DividaParcela) {
     this.divida.parcelas = this.divida.parcelas.filter((x) => x !== parcela);
   }
 }

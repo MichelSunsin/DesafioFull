@@ -6,6 +6,7 @@ using MySqlConnector;
 using System.Linq;
 using DesafioFULL.Models;
 using DesafioFULL.ViewModels;
+using System.Runtime.ExceptionServices;
 
 namespace DesafioFULL.Repositories
 {
@@ -47,7 +48,7 @@ namespace DesafioFULL.Repositories
         }
         catch (Exception ex)
         {
-          throw ex;
+          ExceptionDispatchInfo.Capture(ex).Throw();
         }
         finally
         {
@@ -58,7 +59,7 @@ namespace DesafioFULL.Repositories
     }
     public List<DividaViewModel> GetList()
     {
-      List<DividaViewModel> dividas;
+      List<DividaViewModel> dividas = new List<DividaViewModel>();
       var dividaDictionary = new Dictionary<int, DividaViewModel>();
 
       var connectionString = this.GetConnectionString();
@@ -68,8 +69,10 @@ namespace DesafioFULL.Repositories
                       Divida.PorcentagemMulta,
                       Divida.PorcentagemJuros,
                       Parcela.Id,
+                      Parcela.Numero,
                       Parcela.Valor,
                       Parcela.DataVencimento,
+                      DAY(LAST_DAY(Now())) as DiasNoMes,
                       DATEDIFF(Now(), Parcela.DataVencimento) AS DiasAtraso,
                       Parcela.DividaId
                       FROM Divida INNER JOIN Parcela on Divida.Id = Parcela.DividaId";
@@ -98,7 +101,7 @@ namespace DesafioFULL.Repositories
         }
         catch (Exception ex)
         {
-          throw ex;
+          ExceptionDispatchInfo.Capture(ex).Throw();
         }
         finally
         {

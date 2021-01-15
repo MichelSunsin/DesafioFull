@@ -3,7 +3,7 @@
   <button mat-stroked-button color="basic" (click)="getDividas()">
     <mat-icon>cached</mat-icon>
   </button>
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
     <!-- Número do título -->
     <ng-container matColumnDef="numeroTitulo">
       <th mat-header-cell *matHeaderCellDef>Número do título</th>
@@ -44,11 +44,61 @@
       <td mat-cell *matCellDef="let divida">{{ divida.diasAtraso }}</td>
     </ng-container>
 
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let divida"
+        [attr.colspan]="displayedColumns.length"
+      >
+        <div
+          [@detailExpand]="
+            divida === expandedElement ? 'expanded' : 'collapsed'
+          "
+        >
+          <div *ngIf="expandedElement === divida" class="details-container">
+            <div>
+              <b>Valor original</b>:
+              {{ divida.valorOriginal | currency: "BRL" }} +
+              <br />
+              <b>Multa</b>: {{ divida.valorOriginal | currency: "BRL" }} *
+              {{ divida.porcentagemMulta / 100 }} = {{ divida.valorMulta }}
+              <br />
+              <b>Juros</b>:
+            </div>
+            <div
+              *ngFor="let parcela of divida.parcelas"
+              style="padding-left: 10px"
+            >
+              <b>- Parcela {{ parcela.numero }}</b
+              >: Valor = ({{ divida.porcentagemJuros }}%/{{
+                parcela.diasNoMes
+              }}) * {{ parcela.diasAtraso }} *
+              {{ parcela.valor | currency: "BRL" }} =
+              {{ parcela.juros | number: "1.2-2" }}
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns">
-      {{
-        row | json
-      }}
-    </tr>
+    <tr
+      mat-row
+      matRipple
+      *matRowDef="let row; columns: displayedColumns"
+      class="main-row"
+      [class.example-expanded-row]="expandedElement === row"
+      (click)="expandedElement = expandedElement === row ? null : row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="example-detail-row"
+      style="overflow: hidden; height: 0"
+    ></tr>
   </table>
+  <div class="empty-table" *ngIf="dataSource.length === 0">
+    Nenhum registro encontrado
+  </div>
 </div>
